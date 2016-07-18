@@ -73,9 +73,15 @@ class ViewPokemonController: UITableViewController  {
 		let cell = tableView.dequeueReusableCellWithIdentifier("pokeRow")!
 		APICalls.getPokemonFromServer(Int(missions[indexPath.row].dexNumb!)) { (pokemon) in
 			cell.textLabel?.text = pokemon.name
+            cell.detailTextLabel?.text = String(pokemon.id)
+            if let url = NSURL(string: pokemon.image){
+                if let data = NSData(contentsOfURL: url){
+                    cell.imageView?.image = UIImage(data: data)
+                }
+            }
 		}
 //		cell.textLabel?.text = String(missions[indexPath.row].dexNumb!)
-		cell.detailTextLabel?.text = String(indexPath.row + 1)
+//		cell.detailTextLabel?.text = String(indexPath.row + 1)
 		print(cell)
 		return cell
 	}
