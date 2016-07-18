@@ -14,6 +14,8 @@ class ViewPoachController: UIViewController {
 	
 	
 	@IBOutlet weak var poachLabel: UILabel!
+    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var pokeImage: UIImageView!
 	
 	var cityNumb = 0
 	var delegate: ViewCityControllerDelegate?
@@ -22,13 +24,36 @@ class ViewPoachController: UIViewController {
 	override func viewDidLoad()
 	{
 		super.viewDidLoad()
+        nameLabel.hidden = true
 		let tempNumber = randomPokemon()
 		poachLabel.text = displayPokemon(tempNumber)
+//        getPokemon(tempNumber)
+        APICalls.getPokemonFromServer(tempNumber) { (pokemon) in
+            self.nameLabel.text = pokemon.name
+            self.nameLabel.hidden = false
+            if let url = NSURL(string: pokemon.image) {
+                if let data = NSData(contentsOfURL: url) {
+                    self.pokeImage.image = UIImage(data: data)
+                }
+            }//close if
+        }//close api call
 	}
 	//====
 	
 
 	//====
+    
+//    func getPokemon(pokeNum: Int) {
+//        APICalls.getPokemonFromServer(pokeNum) { (pokemon) in
+//            self.nameLabel.text = pokemon.name
+//            self.nameLabel.hidden = false
+//            if let url = NSURL(string: pokemon.image) {
+//                if let data = NSData(contentsOfURL: url) {
+//                    self.pokeImage.image = UIImage(data: data)
+//                }
+//            }//close if
+//        }//close api call
+//    }
 	
 	func randomPokemon() -> Int {
 		let tempPoke = Int(arc4random_uniform(150)+1)
